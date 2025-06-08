@@ -6,7 +6,7 @@ const { connection } = require('./models/connection');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
-const morgan =require('morgan');
+// const morgan =require('morgan');
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 app.use('/api/auth', authRouter);
 app.use('/api/category', categoryRouter);

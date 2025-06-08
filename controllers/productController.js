@@ -42,11 +42,20 @@ exports.getProducts = async (req, res, next) => {
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
     let search = req.query.search || '';
+    const subcatQuery = req.query.subcat || '';
 
-    let skip = (page - 1) * limit;
-    const filter = search.trim().length > 0
-        ? { title: { $regex: search, $options: 'i' } }
-        : {};
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+
+    if (search.trim().length > 0) {
+        filter.title = { $regex: search, $options: 'i' };
+    }
+
+    if (subcatQuery) {
+        const subcatIds = subcatQuery.split(',');
+        filter.subCategoryId = { $in: subcatIds };
+    }
 
     try {
         const products = await Product.find(filter).skip(skip).limit(limit).sort({ createdAt: 1 });;
