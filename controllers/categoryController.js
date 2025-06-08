@@ -33,4 +33,23 @@ exports.addCategory = async (req, res, next) => {
 
 exports.getCategoryList = async (req, res, next) => {
 
+    try {
+
+        const Allcategories = await Category.aggregate([
+            {
+                $lookup: {
+                    from: 'subcategories',
+                    localField: '_id',
+                    foreignField: 'categoryId',
+                    as: 'subcategories'
+                }
+            }
+        ]);
+
+        res.status(200).json({ success: true, response: Allcategories });
+
+    } catch (error) {
+        next(error)
+    }
+
 }
